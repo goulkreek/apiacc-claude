@@ -1,15 +1,17 @@
-# Système Multi-Agents APIACC v2.0
+# Système Multi-Agents APIACC v2.1
 
 ## Vue d'Ensemble
 
-Ce répertoire contient une équipe optimisée de **8 agents intelligents** capables de prendre en charge l'intégralité des tickets ClickUp du projet APIACC, de l'analyse à la livraison, en incluant :
+Ce répertoire contient une équipe optimisée de **9 agents intelligents** capables de prendre en charge l'intégralité des tickets ClickUp du projet APIACC, de l'analyse à la livraison, en incluant :
 - Développement backend et frontend (full-stack)
 - Logique métier (conformité et mesures)
-- Tests fonctionnels, visuels et en situation réelle
+- Tests unitaires et analyse de code (QA)
+- Tests E2E automatisés avec Playwright (E2E)
+- Tests en situation réelle (Simulation)
 - Génération de rapports
 - Migrations de base de données
 
-**Amélioration v2.0** : Architecture optimisée de 13 → 8 agents pour plus d'efficacité !
+**Amélioration v2.1** : Ajout de l'agent E2E dédié aux tests Playwright !
 
 ## Architecture du Système
 
@@ -63,15 +65,23 @@ Ce répertoire contient une équipe optimisée de **8 agents intelligents** capa
                    │
                    ▼
        ┌───────────────────────────────┐
-       │       QA (UNIFIÉ)             │
-       │  Tests Fonctionnels + Visuels │
+       │            QA                 │
+       │  Tests Unitaires + Analyse    │
        └───────────┬───────────────────┘
                    │
                    │ Rapport de tests
                    │
                    ▼
        ┌───────────────────────────────┐
-       │   SIMULATION (NOUVEAU)        │
+       │         E2E (NOUVEAU)         │
+       │   Tests Playwright Visuels    │
+       └───────────┬───────────────────┘
+                   │
+                   │ Screenshots + Rapport
+                   │
+                   ▼
+       ┌───────────────────────────────┐
+       │        SIMULATION             │
        │   Tests en Situation Réelle   │
        └───────────┬───────────────────┘
                    │
@@ -84,7 +94,7 @@ Ce répertoire contient une équipe optimisée de **8 agents intelligents** capa
        └─────────────────────────────┘
 ```
 
-## Liste des Agents (8 Agents Optimisés)
+## Liste des Agents (9 Agents)
 
 ### 1. **coordinateur** - Orchestrateur Suprême v2.0
 - **Rôle** : Coordination globale de tous les agents
@@ -124,12 +134,19 @@ Ce répertoire contient une équipe optimisée de **8 agents intelligents** capa
 - **Sortie** : Code complet avec tests, de bout en bout
 - **✨ Nouveau** : Unifie backend-dev + frontend-backoffice-dev + frontend-eole-dev + docgen-dev
 
-### 7. **qa** - Agent QA UNIFIÉ ⚡
-- **Rôle** : Tests fonctionnels + visuels + UX + accessibilité
-- **Sortie** : Rapport de tests complet avec bugs détectés
-- **✨ Nouveau** : Unifie qa-fonctionnel + qa-visuel
+### 7. **qa** - Agent QA (Tests Unitaires + Analyse)
+- **Rôle** : Analyse de code, tests unitaires, revue UX
+- **Sortie** : Rapport de tests avec bugs détectés via analyse
+- **Ne fait pas** : Tests E2E automatisés (délégués à l'agent E2E)
 
-### 8. **simulation** - Tests en Situation Réelle 🆕
+### 8. **e2e** - Agent E2E Playwright 🆕
+- **Rôle** : Tests E2E automatisés avec Playwright MCP
+- **Périmètre** : Tests visuels, fonctionnels, responsive, accessibilité
+- **Sortie** : Rapport avec screenshots et preuves visuelles
+- **MCP** : Playwright (browser automation, screenshots)
+- **✨ Nouveau** : Tests automatisés dans un vrai navigateur
+
+### 9. **simulation** - Tests en Situation Réelle
 - **Rôle** : Tests réels de l'application, simulation utilisateurs
 - **Sortie** : Validation du comportement réel de l'application
 - **MCP** : Peut utiliser browser automation (si disponible)
@@ -161,16 +178,17 @@ Ce répertoire contient une équipe optimisée de **8 agents intelligents** capa
 
 ### 1. Ordre d'Exécution Simplifié
 
-**Nouveau workflow v2.0** :
+**Nouveau workflow v2.1** :
 ```
 1. analyste-ticket (obligatoire)
 2. architecte (optionnel - si nouveau schéma, refactoring)
 3. metier (optionnel - si logique métier)
 4. database-expert (optionnel - si migration DB)
 5. developpeur (obligatoire - implémentation complète)
-6. qa (obligatoire - tests fonctionnels + visuels)
-7. simulation (recommandé - tests réels)
-8. Création PR (obligatoire)
+6. qa (obligatoire - tests unitaires + analyse de code)
+7. e2e (recommandé - tests Playwright visuels/fonctionnels)
+8. simulation (optionnel - tests workflows réels)
+9. Création PR (obligatoire)
 ```
 
 ### 2. Agents Unifiés : Comment Ça Marche ?
@@ -194,23 +212,46 @@ packages/measurements/ // Calculs, transformateurs de formats
 // Un seul agent, vision globale de la feature
 ```
 
-#### **Agent qa** (fonctionnel + visuel)
+#### **Agent qa** (tests unitaires + analyse)
 ```markdown
-# Rapport unifié
-1. Tests Fonctionnels
-   - Scénarios nominaux
-   - Scénarios d'erreur
-   - Cas limites
+# Rapport d'analyse
+1. Analyse de Code
+   - Patterns de bugs
+   - Gestion d'erreurs
+   - Validation inputs
 
-2. Tests Visuels
-   - Cohérence UI
-   - UX et accessibilité
-   - Responsivité
+2. Tests Unitaires
+   - yarn test:backend
+   - yarn test:backoffice
+   - Couverture > 80%
 
-3. Conclusion globale
+3. Revue UX (code)
+   - États loading/error/empty
+   - Ant Design correctement utilisé
+
+# Note : Pour tests visuels automatisés → Agent E2E
 ```
 
-#### **Agent simulation** (nouveau)
+#### **Agent e2e** (Playwright MCP) 🆕
+```markdown
+# Tests automatisés dans le navigateur
+1. Tests Fonctionnels
+   - browser_navigate, browser_click, browser_type
+   - Flux complets (login, création, etc.)
+
+2. Tests Visuels
+   - Screenshots automatiques
+   - Multi-viewports (desktop, tablette, mobile)
+
+3. Tests Accessibilité
+   - Navigation clavier (Tab)
+   - Focus visible
+   - Snapshot accessibilité
+
+# Rapport avec preuves visuelles (screenshots)
+```
+
+#### **Agent simulation** (workflows réels)
 ```bash
 # Lance l'application
 cd packages/backend && yarn dev &
@@ -251,32 +292,34 @@ analyste-ticket (5 min)
 → qa (10 min)
 → PR (2 min)
 ```
-*Agents utilisés : 3/8*
+*Agents utilisés : 3/9*
 
-### Feature Moyenne (~2h)
+### Feature Moyenne (~2h30)
 ```
 analyste-ticket (10 min)
 → architecte (5 min)
 → database-expert (10 min)
 → developpeur (1h)
-→ qa (20 min)
+→ qa (15 min)
+→ e2e (20 min) - Tests Playwright visuels
 → simulation (15 min)
 → PR (2 min)
 ```
-*Agents utilisés : 6/8*
+*Agents utilisés : 7/9*
 
-### Feature Complexe (~6h)
+### Feature Complexe (~7h)
 ```
 analyste-ticket (15 min)
 → architecte (10 min)
 → metier (45 min)
 → database-expert (15 min)
 → developpeur (3h)
-→ qa (45 min)
+→ qa (30 min)
+→ e2e (45 min) - Tests Playwright complets
 → simulation (30 min)
 → PR (2 min)
 ```
-*Agents utilisés : 7/8*
+*Agents utilisés : 8/9*
 
 ## Règles Globales
 
@@ -306,17 +349,18 @@ analyste-ticket (15 min)
 - La documentation n'est créée QUE si explicitement demandée
 - Pas de création proactive de README ou ADR
 
-## Comparaison v1.0 vs v2.0
+## Comparaison v1.0 vs v2.0 vs v2.1
 
-| Aspect | v1.0 (13 agents) | v2.0 (8 agents) |
-|--------|------------------|-----------------|
-| **Agents** | 13 | 8 (-38%) |
-| **Coordination** | Complexe | Simplifiée |
-| **Efficacité** | Moyenne | Élevée ⚡ |
-| **Cohérence** | Bonne | Excellente 🎯 |
-| **Tests réels** | ❌ Non | ✅ Oui (agent simulation) 🆕 |
-| **Vision globale** | Fragmentée | Unifiée |
-| **Handoffs** | 12 | 7 (-42%) |
+| Aspect | v1.0 (13 agents) | v2.0 (8 agents) | v2.1 (9 agents) |
+|--------|------------------|-----------------|-----------------|
+| **Agents** | 13 | 8 | 9 |
+| **Coordination** | Complexe | Simplifiée | Simplifiée |
+| **Efficacité** | Moyenne | Élevée | Élevée ⚡ |
+| **Cohérence** | Bonne | Excellente | Excellente 🎯 |
+| **Tests réels** | ❌ Non | ✅ Simulation | ✅ E2E + Simulation 🆕 |
+| **Tests Playwright** | ❌ Non | ❌ Non | ✅ Oui (agent e2e) 🆕 |
+| **Vision globale** | Fragmentée | Unifiée | Unifiée |
+| **Handoffs** | 12 | 7 | 8 |
 
 ## Métriques de Performance
 
@@ -333,19 +377,20 @@ analyste-ticket (15 min)
 
 ## Maintenance du Système
 
-### Structure des Agents v2.0
+### Structure des Agents v2.1
 
 ```
 .claude/agents/
 ├── README.md              # Ce fichier
-├── coordinateur.md        # Orchestrateur v2.0 (mis à jour)
+├── coordinateur.md        # Orchestrateur v2.1 (mis à jour)
 ├── analyste-ticket.md     # Inchangé
 ├── architecte.md          # Inchangé
 ├── metier.md             # ⚡ UNIFIÉ (audit + measurements)
 ├── database-expert.md     # Inchangé
 ├── developpeur.md        # ⚡ UNIFIÉ (backend + frontend + docgen)
-├── qa.md                 # ⚡ UNIFIÉ (fonctionnel + visuel)
-└── simulation.md         # 🆕 NOUVEAU
+├── qa.md                 # Tests unitaires + analyse de code
+├── e2e.md                # 🆕 Tests E2E Playwright (visuels/fonctionnels)
+└── simulation.md         # Tests workflows réels
 ```
 
 ### Ajouter/Modifier un Agent
@@ -358,9 +403,9 @@ analyste-ticket (15 min)
 ## Limitations Actuelles
 
 ### Limitations Techniques
-- Pas encore de browser automation MCP (simulation limitée)
-- Tests visuels via analyse de code (pas de screenshots auto)
-- Pas d'exécution de l'application en continu
+- L'application doit être lancée manuellement avant tests E2E (`yarn dev`)
+- Agent E2E nécessite Playwright MCP configuré
+- Tests de performance avancés non inclus
 
 ### Limitations Métier
 - Le système se base sur le code existant pour faire des hypothèses
@@ -369,9 +414,9 @@ analyste-ticket (15 min)
 ## Évolutions Futures Possibles
 
 ### Court Terme
-- Intégration browser automation MCP pour agent simulation
-- Screenshots automatiques pour tests visuels
 - Métriques et dashboards de performance
+- Tests de régression visuelle automatisés (comparaison screenshots)
+- Intégration CI/CD pour tests E2E
 
 ### Moyen Terme
 - Auto-amélioration du système (les agents apprennent)
@@ -405,6 +450,16 @@ analyste-ticket (15 min)
 
 ## Changelog
 
+### Version 2.1 (2025-11-26)
+- 🆕 **Agent E2E** : Tests automatisés Playwright MCP
+  - Tests visuels avec screenshots automatiques
+  - Tests fonctionnels dans un vrai navigateur
+  - Tests responsive multi-viewports
+  - Tests accessibilité (navigation clavier)
+- ✏️ **Agent QA** : Recentré sur analyse de code et tests unitaires
+- ✅ **Workflow enrichi** : QA → E2E → Simulation
+- ✅ **9 agents** : Équipe complète avec tests automatisés
+
 ### Version 2.0 (2025-01-24)
 - ⚡ **Optimisation majeure** : 13 → 8 agents (-38%)
 - ⚡ **Agents unifiés** : developpeur, metier, qa
@@ -421,6 +476,6 @@ analyste-ticket (15 min)
 
 ---
 
-**Système v2.0 opérationnel et optimisé ! 🚀**
+**Système v2.1 opérationnel avec tests E2E Playwright ! 🚀**
 
-**Prêt à traiter des tickets ClickUp avec une efficacité maximale.**
+**Prêt à traiter des tickets ClickUp avec tests automatisés complets.**

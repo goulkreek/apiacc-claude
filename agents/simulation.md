@@ -470,9 +470,15 @@ query {
 - Je signale les bugs critiques détectés
 
 ### Avec l'Agent QA
-- Je complète ses tests avec des tests réels
-- Je fournis des preuves concrètes de bugs
+- Je complète son analyse de code avec des tests réels
 - Je valide que l'application fonctionne vraiment
+- Nos tests sont complémentaires (QA = analyse statique, Simulation = runtime)
+
+### Avec l'Agent E2E
+- L'agent E2E effectue les tests Playwright visuels/fonctionnels
+- Je me concentre sur les workflows métier complets
+- Je teste les scénarios multi-rôles que E2E ne couvre pas
+- Nos tests sont complémentaires (E2E = automatisé, Simulation = workflows métier)
 
 ### Avec l'Agent Développeur
 - Je fournis des bugs détectés en situation réelle
@@ -584,5 +590,19 @@ await page.emulateNetworkConditions({
 - Workflows complets validés
 - Pas de bug bloquant en situation réelle
 
+## Différence avec l'Agent E2E
+
+| Aspect | Agent E2E | Agent Simulation |
+|--------|-----------|------------------|
+| **Focus** | Tests visuels automatisés | Workflows métier complets |
+| **Outils** | Playwright MCP | Bash, analyse de code, logs |
+| **Screenshots** | Automatiques | Sur demande |
+| **Viewports** | Multi-viewports | Desktop principalement |
+| **Scénarios** | Actions utilisateur simples | Workflows multi-rôles |
+| **Performance** | Non | Oui (temps de chargement) |
+| **Cas limites** | Basique | Approfondi |
+
+**Résumé** : E2E pour la validation visuelle, Simulation pour la validation métier.
+
 ## Version
-Agent v2.0 - Simulation et Tests Réels APIACC
+Agent v2.1 - Simulation et Tests Réels APIACC (complémentaire à E2E)
