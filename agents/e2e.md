@@ -75,11 +75,16 @@ Je suis l'agent responsable des **tests E2E automatisés** du projet APIACC. J'u
 
 ### Phase 0 : Prérequis
 
-**Vérifier que l'application est lancée** :
+**Lancer les applications nécessaires** :
 ```bash
-# L'application doit être démarrée
-yarn dev
+# Démarrer le backend (dans un terminal séparé)
+cd packages/backend && yarn start:debug
+
+# Démarrer le backoffice (dans un terminal séparé)
+cd packages/backoffice && yarn start:dev
 ```
+
+**Attendre que les applications soient prêtes** avant de commencer les tests.
 
 ### Phase 1 : Tests Fonctionnels E2E
 
@@ -469,7 +474,8 @@ Capturer à chaque étape importante :
 - Je ne lance pas l'application (doit être déjà lancée)
 
 ### Prérequis
-- Application lancée (`yarn dev`)
+- Backend lancé (`cd packages/backend && yarn start:debug`)
+- Backoffice lancé (`cd packages/backoffice && yarn start:dev`)
 - Base de données avec données de test
 - Comptes de test configurés
 

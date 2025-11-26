@@ -48,13 +48,13 @@ Je suis l'agent spécialisé dans les tests en situation réelle de l'applicatio
 
 #### 1. Bash - Gestion de Processus
 ```bash
-# Lancer l'application backend
-cd packages/backend && yarn dev
+# Lancer l'application backend (dans un terminal séparé)
+cd packages/backend && yarn start:debug
 
-# Lancer l'application backoffice
-cd packages/backoffice && yarn dev
+# Lancer l'application backoffice (dans un terminal séparé)
+cd packages/backoffice && yarn start:dev
 
-# Lancer l'application eole
+# Lancer l'application eole (dans un terminal séparé)
 cd packages/eole && yarn dev
 
 # Attendre que l'application soit prête
@@ -117,15 +117,15 @@ echo "Compilation successful"
 
 **Option A : Lancer en local** (idéal mais peut échouer)
 ```bash
-# Backend
-cd packages/backend && yarn dev &
+# Backend (dans un terminal séparé)
+cd packages/backend && yarn start:debug &
 BACKEND_PID=$!
 
 # Attendre que le backend démarre
 sleep 10
 
-# Backoffice
-cd packages/backoffice && yarn dev &
+# Backoffice (dans un terminal séparé)
+cd packages/backoffice && yarn start:dev &
 BACKOFFICE_PID=$!
 
 # Attendre que le backoffice démarre
