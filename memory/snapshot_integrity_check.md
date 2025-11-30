@@ -47,6 +47,29 @@ type MeasurementSessionSnapshotSummary = {
 - `mst_instantiation_error` : Échec d'instanciation MST
 - `cross_snapshot_inconsistency` : Incohérence entre snapshots d'une série
 
+### Snapshots impactés (impactedSnapshots)
+
+Chaque issue peut inclure une liste des autres snapshots de la série impactés :
+
+```typescript
+type ImpactedSnapshotRef = {
+  snapshotId: string
+  siteAuditId: string
+  siteAuditName: string
+  createdAt: Date
+}
+
+type IntegrityCheckIssue = {
+  type: IntegrityCheckIssueType
+  severity: 'error' | 'warning'
+  message: string
+  details?: Record<string, unknown>
+  impactedSnapshots?: ImpactedSnapshotRef[]  // Autres snapshots à corriger ensemble
+}
+```
+
+Cette information est automatiquement ajoutée par `checkAuditSeriesIntegrity` pour les issues liées à un siteEntity (ex: `duplicate_opening_id`). Elle permet de savoir quels snapshots devront être corrigés de manière cohérente.
+
 ## Fichiers principaux
 
 ```
